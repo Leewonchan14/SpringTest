@@ -20,7 +20,7 @@ import java.util.List;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final MemberRepository memberRepository;
-    private ItemRepository itemRepository;
+    private final ItemRepository itemRepository;
 
 
     /**
