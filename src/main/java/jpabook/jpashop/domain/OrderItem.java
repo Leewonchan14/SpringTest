@@ -18,11 +18,11 @@ public class OrderItem {
     @JoinColumn(name = "item_id")
     private Item item;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id")
     private Order order;
 
-    private int orderPrive; //주문 가격
+    private int orderPrice; //주문 가격
 
     private int count; //주문 수량
 
@@ -30,7 +30,7 @@ public class OrderItem {
     public static OrderItem createOrderItem(Item item, int orderPrice, int count) {
         OrderItem orderItem = new OrderItem();
         orderItem.setItem(item);
-        orderItem.setOrderPrive(orderPrice);
+        orderItem.setOrderPrice(orderPrice);
         orderItem.setCount(count);
 
         item.removeStock(count);
@@ -45,7 +45,7 @@ public class OrderItem {
 
     //조회 로직//
     public int getTotalPrice() {
-        return getOrderPrive() * getCount();
+        return getOrderPrice() * getCount();
     }
 
 }

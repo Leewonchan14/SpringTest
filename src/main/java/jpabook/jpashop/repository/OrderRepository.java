@@ -29,26 +29,27 @@ public class OrderRepository {
     /**
      * JPA Criteria
      */
-    public List<Order> findAll(OrderSearch orderSearch) {
-        CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
-        CriteriaQuery<Order> query = criteriaBuilder.createQuery(Order.class);
-        Root<Order> o = query.from(Order.class);
-        Join<Object, Object> m = o.join("member", JoinType.INNER);
-
+    public List<Order> findAllByCriteria(OrderSearch orderSearch) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Order> cq = cb.createQuery(Order.class);
+        Root<Order> o = cq.from(Order.class);
+        Join<Order, Member> m = o.join("member", JoinType.INNER); //회원과 조인
         List<Predicate> criteria = new ArrayList<>();
-
+        //주문 상태 검색
         if (orderSearch.getOrderStatus() != null) {
-            Predicate status = criteriaBuilder.equal(o.get("status"), orderSearch.getOrderStatus());
+            Predicate status = cb.equal(o.get("status"),
+                    orderSearch.getOrderStatus());
             criteria.add(status);
         }
+        //회원 이름 검색
         if (StringUtils.hasText(orderSearch.getMemberName())) {
             Predicate name =
-                    criteriaBuilder.like(m.<String>get("name"), "%" +
+                    cb.like(m.<String>get("name"), "%" +
                             orderSearch.getMemberName() + "%");
             criteria.add(name);
         }
-        query.where(criteriaBuilder.and(criteria.toArray(new Predicate[criteria.size()])));
-        TypedQuery<Order> q = em.createQuery(query).setMaxResults(1000); //최대1000건
-        return q.getResultList();
+        cq.where(cb.and(criteria.toArray(new Predicate[criteria.size()])));
+        TypedQuery<Order> query = em.createQuery(cq).setMaxResults(1000); //최대1000건
+        return query.getResultList();
     }
 }
