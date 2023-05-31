@@ -74,11 +74,11 @@ public class OrderApiController {
 
     }
 
-    @GetMapping("/api/v6/orders")
-    public List<OrderFlatDto> orderV5() {
-        return orderQueryRepository.findAllByDto_optimization();
-
-    }
+//    @GetMapping("/api/v6/orders")
+//    public List<OrderFlatDto> orderV5() {
+//        return orderQueryRepository.findAllByDto_optimization();
+//
+//    }
 
 
     @Data
